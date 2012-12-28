@@ -13,8 +13,8 @@ namespace iTunesExport {
 
     public IEnumerable<Album> Convert(List<Track> tracks) {
       RemoveTracksWithoutAlbumNames(tracks);
-      var albums = BuildCompilationAlbums(tracks).ToList();
-      albums.AddRange(BuildAlbums(tracks));
+      var albums = BuildAlbums(tracks).ToList();
+      albums.AddRange(BuildCompilationAlbums(tracks));
       return albums;
     }
 

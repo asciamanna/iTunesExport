@@ -10,6 +10,14 @@ namespace iTunesExport {
     string ITunesFileLocation { get; }
   }
   public class Config : IConfig {
-    public string ITunesFileLocation { get { return ConfigurationManager.AppSettings["iTunesLibraryLocation"]; } }
+    public string ITunesFileLocation {
+      get {
+        var iTunesLibraryLocation = ConfigurationManager.AppSettings["iTunesLibraryLocation"];
+        if (string.IsNullOrEmpty(iTunesLibraryLocation)) {
+          throw new ConfigurationErrorsException("iTunesLibraryLocation must be specified in App.config");
+        }
+        return iTunesLibraryLocation;
+      }
+    }
   }
 }
