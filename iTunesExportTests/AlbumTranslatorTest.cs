@@ -98,5 +98,17 @@ namespace iTunesImportTests {
       Assert.AreEqual(1, albums.Count());
       Assert.AreEqual(compTrack1.Album, albums.First().Artist);
     }
+
+    [TestCase("Zappa In New York (Disc 1)")]
+    [TestCase("Zappa In New York ( Disc 1 )")]
+    [TestCase("Zappa In New York(Disc 1) ")]
+    [TestCase("Zappa In New York (Disc1)")]
+    [TestCase("Zappa In New York [Disc 1]")]
+    [TestCase("Zappa In New York [ Disc 1 ]")]
+    [TestCase("Zappa In New York[Disc 1] ")]
+    [TestCase("Zappa In New York [Disc1]")]
+    public void RemoveDiscNumbers(string albumName) {
+      Assert.AreEqual("Zappa In New York", AlbumTranslator.RemoveDiscNumbers(albumName));
+    }
   }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace iTunesExport {
@@ -30,7 +31,7 @@ namespace iTunesExport {
     static Func<IGrouping<string, Track>, Album> AlbumGenerator() {
       return gt => new Album {
         AlbumArtist = Trim(gt.First().AlbumArtist), Artist = Trim(gt.First().Artist),
-        Year = gt.First().Year, Genre = Trim(gt.First().Genre), Name = Trim(gt.First().Album)
+        Year = gt.First().Year, Genre = Trim(gt.First().Genre), Name = RemoveDiscNumbers(Trim(gt.First().Album))
       };
     }
 
@@ -44,6 +45,11 @@ namespace iTunesExport {
       var groupedTracks = compilationTracks.GroupBy(ct => ct.Album);
       return groupedTracks.Select(AlbumGenerator());
     }
+
+    public static string RemoveDiscNumbers(string album) {
+      return Regex.Replace(album, @"\s*(\(|\[)\s*Disc\s*\d\s*(\)|\])\s*", string.Empty);
+    }
+
 
   }
 }
