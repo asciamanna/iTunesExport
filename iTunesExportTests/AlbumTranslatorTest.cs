@@ -19,7 +19,10 @@ namespace iTunesImportTests {
         AlbumArtist = "John Coltrane",
         Genre = "Jazz",
         Name = "Summertime",
-        Year = 1961
+        Year = 1961,
+        DateAdded = DateTime.Now.AddDays(-3),
+        PlayCount = 10,
+        PlayDate = DateTime.Now.AddDays(-5)
       };
     }
 
@@ -55,6 +58,25 @@ namespace iTunesImportTests {
       Assert.AreEqual(track2.Genre, album.Genre);
       Assert.AreEqual(track2.Year, album.Year);
       Assert.AreEqual(track2.Album, album.Name);
+      Assert.AreEqual(track2.DateAdded, album.DateAdded);
+      Assert.AreEqual(track2.PlayDate, album.LastPlayed);
+    }
+
+    [Test]
+    public void Convert_Calculates_Average_Play_Count() {
+      var track2 = track.Copy();
+      track2.Name = "But Not For Me";
+      track2.PlayCount = 4;
+      
+      var track3 = track.Copy();
+      track3.Name = "My Favorite Things";
+      track3.PlayCount = 8;
+
+      var translator = new AlbumTranslator();
+      var albums = translator.Convert(new List<Track> { track, track2, track3 });
+      var album = albums.First();
+      var expected = (track.PlayCount + track2.PlayCount + track3.PlayCount) / 3;
+      Assert.AreEqual(expected, album.AveragePlayCount);
     }
 
     [Test]
