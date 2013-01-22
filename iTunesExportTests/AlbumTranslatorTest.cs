@@ -66,7 +66,7 @@ namespace iTunesImportTests {
     public void Convert_Calculates_Average_Play_Count() {
       var track2 = track.Copy();
       track2.Name = "But Not For Me";
-      track2.PlayCount = 4;
+      track2.PlayCount = 5;
       
       var track3 = track.Copy();
       track3.Name = "My Favorite Things";
@@ -75,8 +75,7 @@ namespace iTunesImportTests {
       var translator = new AlbumTranslator();
       var albums = translator.Convert(new List<Track> { track, track2, track3 });
       var album = albums.First();
-      var expected = (track.PlayCount + track2.PlayCount + track3.PlayCount) / 3;
-      Assert.AreEqual(expected, album.AveragePlayCount);
+      Assert.AreEqual(Math.Round((track2.PlayCount.Value + track3.PlayCount.Value + track.PlayCount.Value) / 3m), album.AveragePlayCount);
     }
 
     [Test]

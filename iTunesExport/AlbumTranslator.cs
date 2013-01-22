@@ -30,12 +30,19 @@ namespace iTunesExport {
 
     static Func<IGrouping<string, Track>, Album> AlbumGenerator() {
       return gt => new Album {
-        AlbumArtist = Trim(gt.First().AlbumArtist), Artist = Trim(gt.First().Artist),
-        Year = gt.First().Year, Genre = Trim(gt.First().Genre), Name = RemoveDiscNumbers(Trim(gt.First().Album)),
+        AlbumArtist = Trim(gt.First().AlbumArtist), 
+        Artist = Trim(gt.First().Artist),
+        Year = gt.First().Year, 
+        Genre = Trim(gt.First().Genre), 
+        Name = RemoveDiscNumbers(Trim(gt.First().Album)),
         DateAdded = gt.First().DateAdded.HasValue ? gt.First().DateAdded.Value : DateTime.MinValue,
-        LastPlayed = gt.First().PlayDate,
-        AveragePlayCount = gt.Sum(g => g.PlayCount ?? 0) / gt.Count()
+        LastPlayed = gt.First().PlayDate.HasValue ? gt.First().PlayDate.Value : DateTime.MinValue,
+        AveragePlayCount = CalculateAlbumPlayCount(gt)
       };
+    }
+
+    static decimal CalculateAlbumPlayCount(IGrouping<string, Track> gt) {
+      return Math.Round(gt.Sum(g => g.PlayCount ?? 0) / (decimal)gt.Count());
     }
 
     static string Trim(string value) {
