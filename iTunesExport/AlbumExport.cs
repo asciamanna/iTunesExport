@@ -26,15 +26,15 @@ namespace iTunesExport {
       var tracks = library.Parse(config.ITunesFileLocation);
       var albums = translator.Convert(tracks.ToList());
 
-      var updated = db.UpdateExistingWithIDs(albums);
+      var updatedCount = db.UpdateExistingWithIDs(albums);
       var albumsToInsert = AlbumsToInsert(albums);
-      var inserted = albumsToInsert.Count();
+      var insertedCount = albumsToInsert.Count();
       foreach (var album in albumsToInsert) {
         db.Albums.Add(album);
       }
       Console.WriteLine("Saving iTunes Library Albums to database...");
       db.SaveChanges();
-      Console.WriteLine(string.Format("FINISHED: " + Environment.NewLine + "{0} Albums updated" + Environment.NewLine + "{1} Albums inserted", updated, inserted));
+      Console.WriteLine(string.Format("FINISHED: " + Environment.NewLine + "{0} Albums updated" + Environment.NewLine + "{1} Albums inserted", updatedCount, insertedCount));
       db.Dispose();
     }
     
