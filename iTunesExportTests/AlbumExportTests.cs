@@ -1,12 +1,9 @@
-﻿using System;
+﻿using iTunesExport;
+using ITunesLibraryParser;
+using NUnit.Framework;
+using Rhino.Mocks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using iTunesExport;
-using ITunesLibraryParser;
-using Rhino.Mocks;
-using System.Data.Entity;
 
 namespace iTunesExportTests {
   [TestFixture]

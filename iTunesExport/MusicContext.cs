@@ -5,8 +5,6 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Metadata.Edm;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iTunesExport {
   public interface IMusicContext : IDisposable {
