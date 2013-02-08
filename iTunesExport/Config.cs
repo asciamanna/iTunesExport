@@ -35,9 +35,14 @@ namespace iTunesExport {
       }
     }
 
-
     public string LastFmApiKey {
-      get { throw new NotImplementedException(); }
+      get {
+        var lastFmApiKey = ConfigurationManager.AppSettings["lastFmApiKey"];
+        if (string.IsNullOrEmpty(lastFmApiKey)) {
+          throw new ConfigurationErrorsException("lastFmApiKey must be specified in App.config");
+        }
+        return lastFmApiKey;
+      }
     }
   }
 }
