@@ -8,20 +8,18 @@ namespace iTunesExport {
     readonly IMusicContext db;
     readonly IITunesLibrary library;
     readonly IAlbumTranslator translator;
-    readonly IConfig config;
 
-    public AlbumExport() : this(new MusicContext(), new ITunesLibrary(), new AlbumTranslator(), new Config()) { }
+    public AlbumExport() : this(new MusicContext(), new ITunesLibrary(), new AlbumTranslator()) { }
 
-    public AlbumExport(IMusicContext db, IITunesLibrary library, IAlbumTranslator translator, IConfig config) {
+    public AlbumExport(IMusicContext db, IITunesLibrary library, IAlbumTranslator translator) {
       this.db = db;
       this.library = library;
       this.translator = translator;
-      this.config = config;
     }
 
     public void Run() {
       Console.WriteLine("Reading iTunes Library File...");
-      var tracks = library.Parse(config.ITunesFileLocation);
+      var tracks = library.Parse(Config.Instance.ITunesFileLocation);
       var albums = translator.Convert(tracks.ToList());
 
       var updatedCount = db.UpdateExistingWithIDs(albums);

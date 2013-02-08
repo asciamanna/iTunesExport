@@ -28,8 +28,9 @@ namespace iTunesExportTests {
       translator.Stub(t => t.Convert(tracks)).Return(albums);
       db.Expect(d => d.SaveChanges()).Return(1);
 
-      new AlbumExport(db, library, translator, config).Run();
-
+      using (new ConfigScope(config)) {
+        new AlbumExport(db, library, translator).Run();
+      }
       Assert.AreEqual(1, dbSetAlbums.Count());
       Assert.AreEqual(album, dbSetAlbums.First());
       db.VerifyAllExpectations();

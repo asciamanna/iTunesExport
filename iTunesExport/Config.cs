@@ -8,8 +8,23 @@ using System.Threading.Tasks;
 namespace iTunesExport {
   public interface IConfig {
     string ITunesFileLocation { get; }
+    string LastFmApiKey { get; }
   }
+
   public class Config : IConfig {
+    static IConfig config;
+
+    private Config() { }
+    public static IConfig Instance {
+      get {
+        if (config == null) {
+          config = new Config();
+        }
+        return config;
+      }
+      set { config = value; }
+    }
+
     public string ITunesFileLocation {
       get {
         var iTunesLibraryLocation = ConfigurationManager.AppSettings["iTunesLibraryLocation"];
@@ -18,6 +33,11 @@ namespace iTunesExport {
         }
         return iTunesLibraryLocation;
       }
+    }
+
+
+    public string LastFmApiKey {
+      get { throw new NotImplementedException(); }
     }
   }
 }
