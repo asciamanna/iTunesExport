@@ -9,6 +9,9 @@ namespace iTunesExport {
     IEnumerable<Album> Convert(List<Track> tracks);
   }
   public class AlbumTranslator : IAlbumTranslator {
+    //SqlCE doesn't support DateTime2 so sql server mindate needs to be used 
+    //for null dates.
+    static DateTime SqlServerMinDate = new DateTime(1753, 1, 1); 
 
     public IEnumerable<Album> Convert(List<Track> tracks) {
       RemoveTracksWithoutAlbumNames(tracks);
@@ -33,8 +36,8 @@ namespace iTunesExport {
         Year = gt.First().Year, 
         Genre = Trim(gt.First().Genre), 
         Name = RemoveDiscNumbers(Trim(gt.First().Album)),
-        DateAdded = gt.First().DateAdded.HasValue ? gt.First().DateAdded.Value : DateTime.MinValue,
-        LastPlayed = gt.First().PlayDate.HasValue ? gt.First().PlayDate.Value : DateTime.MinValue,
+        DateAdded = gt.First().DateAdded.HasValue ? gt.First().DateAdded.Value : SqlServerMinDate,
+        LastPlayed = gt.First().PlayDate.HasValue ? gt.First().PlayDate.Value : SqlServerMinDate,
         AveragePlayCount = CalculateAlbumPlayCount(gt)
       };
     }

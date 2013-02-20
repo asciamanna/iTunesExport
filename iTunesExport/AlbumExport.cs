@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LastfmClient;
+using System.Diagnostics;
 
 namespace iTunesExport {
   public class AlbumExport {
@@ -19,6 +21,8 @@ namespace iTunesExport {
 
     public void Run() {
       Console.WriteLine("Reading iTunes Library File...");
+      var stopwatch = new Stopwatch();
+      stopwatch.Start();
       var tracks = library.Parse(Config.Instance.ITunesFileLocation);
       var albums = translator.Convert(tracks.ToList());
 
@@ -30,7 +34,8 @@ namespace iTunesExport {
       }
       Console.WriteLine("Saving iTunes Library Albums to database...");
       db.SaveChanges();
-      Console.WriteLine(string.Format("FINISHED: " + Environment.NewLine + "{0} Albums updated" + Environment.NewLine + "{1} Albums inserted", updatedCount, insertedCount));
+      stopwatch.Stop();
+      Console.WriteLine(string.Format("FINISHED in: {0}" + Environment.NewLine + "{1} Albums updated" + Environment.NewLine + "{2} Albums inserted", stopwatch.Elapsed, updatedCount, insertedCount));
       db.Dispose();
     }
     

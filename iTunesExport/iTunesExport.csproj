@@ -121,6 +121,10 @@
       <Project>{b251eee4-5448-4f54-9755-86eb79da9419}</Project>
       <Name>ITunesLibraryParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LastfmClient\LastfmClient\LastfmClient.csproj">
+      <Project>{4da2791c-1bcb-48b8-a144-68346de0aea1}</Project>
+      <Name>LastfmClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

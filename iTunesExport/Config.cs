@@ -9,6 +9,7 @@ namespace iTunesExport {
   public interface IConfig {
     string ITunesFileLocation { get; }
     string LastFmApiKey { get; }
+    string LastFmUser { get; }
   }
 
   public class Config : IConfig {
@@ -42,6 +43,17 @@ namespace iTunesExport {
           throw new ConfigurationErrorsException("lastFmApiKey must be specified in App.config");
         }
         return lastFmApiKey;
+      }
+    }
+
+
+    public string LastFmUser {
+      get {
+        var lastFmUser = ConfigurationManager.AppSettings["lastFmUser"];
+        if (string.IsNullOrEmpty(lastFmUser)) {
+          throw new ConfigurationErrorsException("lastFmUser must be specified in App.config");
+        }
+        return lastFmUser;
       }
     }
   }
