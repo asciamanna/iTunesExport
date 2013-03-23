@@ -45,9 +45,11 @@ namespace iTunesImportTests {
     public void Convert_Converts_Multiple_Tracks_From_Same_Album_To_A_Single_Album() {
       var track2 = track.Copy();
       track2.Name = "But Not For Me";
+      track2.PlayDate = DateTime.Now.AddDays(-4);
 
       var track3 = track.Copy();
       track3.Name = "My Favorite Things";
+      track3.PlayDate = DateTime.Now.AddDays(-3);
 
       var translator = new AlbumTranslator();
       var albums = translator.Convert(new List<Track> { track, track2, track3 });
@@ -59,23 +61,23 @@ namespace iTunesImportTests {
       Assert.AreEqual(track2.Year, album.Year);
       Assert.AreEqual(track2.Album, album.Name);
       Assert.AreEqual(track2.DateAdded, album.DateAdded);
-      Assert.AreEqual(track2.PlayDate, album.LastPlayed);
+      Assert.AreEqual(track3.PlayDate, album.LastPlayed, "track with latest play date is used for album play date");
     }
 
     [Test]
-    public void Convert_Calculates_Average_Play_Count() {
+    public void Convert_Calculates_PlayCount_By_Summing_Track_PlayCounts() {
       var track2 = track.Copy();
-      track2.Name = "But Not For Me";
-      track2.PlayCount = 5;
-      
+      track.Name = "My Favorite Things";
+      track2.PlayCount = 8;
+
       var track3 = track.Copy();
-      track3.Name = "My Favorite Things";
-      track3.PlayCount = 8;
+      track3.Name = "Naima";
+      track3.PlayCount = 2;
 
       var translator = new AlbumTranslator();
       var albums = translator.Convert(new List<Track> { track, track2, track3 });
       var album = albums.First();
-      Assert.AreEqual(Math.Round((track2.PlayCount.Value + track3.PlayCount.Value + track.PlayCount.Value) / 3m), album.AveragePlayCount);
+      Assert.AreEqual(track.PlayCount + track2.PlayCount + track3.PlayCount, album.PlayCount);
     }
 
     [Test]
@@ -105,7 +107,7 @@ namespace iTunesImportTests {
     }
 
     [Test]
-    public void Convert_Creates_CompilationAlbums_With_Artist_Same_As_Album_Name() {
+    public void Convert_Creates_CompilationAlbums_With_Artist_Name_Various_Artists() {
       var compTrack1 = track.Copy();
       compTrack1.PartOfCompilation = true;
       compTrack1.Artist = "First Artist";
@@ -117,7 +119,7 @@ namespace iTunesImportTests {
       var translator = new AlbumTranslator();
       var albums = translator.Convert(new List<Track> { compTrack1, compTrack2 });
       Assert.AreEqual(1, albums.Count());
-      Assert.AreEqual(compTrack1.Album, albums.First().Artist);
+      Assert.AreEqual("Various Artists", albums.First().Artist);
     }
 
     [TestCase("Zappa In New York (Disc 1)")]

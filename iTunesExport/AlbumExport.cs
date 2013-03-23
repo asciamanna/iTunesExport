@@ -10,13 +10,14 @@ namespace iTunesExport {
     readonly IMusicContext db;
     readonly IITunesLibrary library;
     readonly IAlbumTranslator translator;
+    readonly ILastFmAlbumInfo albumInfo;
+    public AlbumExport() : this(new MusicContext(), new ITunesLibrary(), new AlbumTranslator(), new LastFmAlbumInfo()) { }
 
-    public AlbumExport() : this(new MusicContext(), new ITunesLibrary(), new AlbumTranslator()) { }
-
-    public AlbumExport(IMusicContext db, IITunesLibrary library, IAlbumTranslator translator) {
+    public AlbumExport(IMusicContext db, IITunesLibrary library, IAlbumTranslator translator, ILastFmAlbumInfo albumInfo) {
       this.db = db;
       this.library = library;
       this.translator = translator;
+      this.albumInfo = albumInfo;
     }
 
     public void Run() {
@@ -24,8 +25,11 @@ namespace iTunesExport {
       var stopwatch = new Stopwatch();
       stopwatch.Start();
       var tracks = library.Parse(Config.Instance.ITunesFileLocation);
+    
       var albums = translator.Convert(tracks.ToList());
-
+      Console.WriteLine("Calling Last FM Service to Get Album Info...");
+      albumInfo.UpdateAlbums(albums);
+ 
       var updatedCount = db.UpdateExistingWithIDs(albums);
       var albumsToInsert = AlbumsToInsert(albums);
       var insertedCount = albumsToInsert.Count();
@@ -38,7 +42,7 @@ namespace iTunesExport {
       Console.WriteLine(string.Format("FINISHED in: {0}" + Environment.NewLine + "{1} Albums updated" + Environment.NewLine + "{2} Albums inserted", stopwatch.Elapsed, updatedCount, insertedCount));
       db.Dispose();
     }
-    
+
     static IEnumerable<Album> AlbumsToInsert(IEnumerable<Album> albums) {
       return albums.Where(a => a.AlbumID == 0);
     }

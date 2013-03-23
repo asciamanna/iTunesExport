@@ -75,6 +75,7 @@
     <Compile Include="AlbumExport.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConfigScope.cs" />
+    <Compile Include="LastFmAlbumInfo.cs" />
     <Compile Include="MusicContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

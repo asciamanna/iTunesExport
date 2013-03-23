@@ -11,7 +11,7 @@ namespace iTunesExport {
   public class AlbumTranslator : IAlbumTranslator {
     //SqlCE doesn't support DateTime2 so sql server mindate needs to be used 
     //for null dates.
-    static DateTime SqlServerMinDate = new DateTime(1753, 1, 1); 
+    static DateTime SqlServerMinDate = new DateTime(1753, 1, 1);
 
     public IEnumerable<Album> Convert(List<Track> tracks) {
       RemoveTracksWithoutAlbumNames(tracks);
@@ -31,19 +31,19 @@ namespace iTunesExport {
 
     static Func<IGrouping<string, Track>, Album> AlbumGenerator() {
       return gt => new Album {
-        AlbumArtist = Trim(gt.First().AlbumArtist), 
+        AlbumArtist = Trim(gt.First().AlbumArtist),
         Artist = Trim(gt.First().Artist),
-        Year = gt.First().Year, 
-        Genre = Trim(gt.First().Genre), 
+        Year = gt.First().Year,
+        Genre = Trim(gt.First().Genre),
         Name = RemoveDiscNumbers(Trim(gt.First().Album)),
         DateAdded = gt.First().DateAdded.HasValue ? gt.First().DateAdded.Value : SqlServerMinDate,
-        LastPlayed = gt.First().PlayDate.HasValue ? gt.First().PlayDate.Value : SqlServerMinDate,
-        AveragePlayCount = CalculateAlbumPlayCount(gt)
+        LastPlayed = gt.Max(t => t.PlayDate) != null ? gt.Max(t => t.PlayDate) : SqlServerMinDate,
+        PlayCount = CalculateAlbumPlayCount(gt)
       };
     }
 
-    static decimal CalculateAlbumPlayCount(IGrouping<string, Track> gt) {
-      return Math.Round(gt.Sum(g => g.PlayCount ?? 0) / (decimal)gt.Count());
+    static int CalculateAlbumPlayCount(IGrouping<string, Track> gt) {
+      return gt.Sum(g => g.PlayCount ?? 0);
     }
 
     static string Trim(string value) {
@@ -52,7 +52,7 @@ namespace iTunesExport {
 
     IEnumerable<Album> BuildCompilationAlbums(List<Track> tracks) {
       var compilationTracks = tracks.Where(t => t.PartOfCompilation).ToList();
-      compilationTracks.ForEach(ct => ct.Artist = ct.Album);
+      compilationTracks.ForEach(ct => ct.Artist = "Various Artists");
       var groupedTracks = compilationTracks.GroupBy(ct => ct.Album);
       return groupedTracks.Select(AlbumGenerator());
     }

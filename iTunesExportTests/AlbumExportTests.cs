@@ -14,6 +14,7 @@ namespace iTunesExportTests {
       var library = MockRepository.GenerateMock<IITunesLibrary>();
       var translator = MockRepository.GenerateMock<IAlbumTranslator>();
       var config = MockRepository.GenerateMock<IConfig>();
+      var albumInfo = MockRepository.GenerateMock<ILastFmAlbumInfo>();
 
       var album = new Album { Artist = "Chroma Key", Genre = "Rock", Name = "You Go Now", Year = 1999 };
       var tracks = new List<Track>();
@@ -29,10 +30,11 @@ namespace iTunesExportTests {
       db.Expect(d => d.SaveChanges()).Return(1);
 
       using (new ConfigScope(config)) {
-        new AlbumExport(db, library, translator).Run();
+        new AlbumExport(db, library, translator, albumInfo).Run();
       }
       Assert.AreEqual(1, dbSetAlbums.Count());
       Assert.AreEqual(album, dbSetAlbums.First());
+      albumInfo.AssertWasCalled(t => t.UpdateAlbums(albums));
       db.VerifyAllExpectations();
     }
   }

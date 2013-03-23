@@ -58,12 +58,17 @@
     <Compile Include="AlbumTranslatorTest.cs" />
     <Compile Include="AlbumExportTests.cs" />
     <Compile Include="FakeDbSet.cs" />
+    <Compile Include="LastFmAlbumInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ITunesLibraryParser\ITunesLibraryParser\ITunesLibraryParser.csproj">
       <Project>{b251eee4-5448-4f54-9755-86eb79da9419}</Project>
       <Name>ITunesLibraryParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LastfmClient\LastfmClient\LastfmClient.csproj">
+      <Project>{4da2791c-1bcb-48b8-a144-68346de0aea1}</Project>
+      <Name>LastfmClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\iTunesExport\iTunesExport.csproj">
       <Project>{D50A4E94-C59B-4066-AAB2-822AD8F7CC41}</Project>
