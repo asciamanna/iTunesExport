@@ -25,7 +25,7 @@ namespace iTunesExport {
     }
 
     IEnumerable<Album> BuildAlbums(List<Track> tracks) {
-      var groupedTracks = tracks.Where(t => !t.PartOfCompilation).GroupBy(t => Trim(t.Artist) + "-" + RemoveDiscNumbers(Trim(t.Album)));
+      var groupedTracks = tracks.Where(t => !t.PartOfCompilation).GroupBy(t => Trim(t.Artist) + "-" + Trim(t.Album));// RemoveDiscNumbers(Trim(t.Album)));
       return groupedTracks.Where(gt => gt.Count() > 2).Select(AlbumGenerator());
     }
 
@@ -35,8 +35,8 @@ namespace iTunesExport {
         Artist = Trim(gt.First().Artist),
         Year = gt.First().Year,
         Genre = Trim(gt.First().Genre),
-        Name = RemoveDiscNumbers(Trim(gt.First().Album)),
-        DateAdded = gt.First().DateAdded.HasValue ? gt.First().DateAdded.Value : SqlServerMinDate,
+       Name = Trim(gt.First().Album), 
+       DateAdded = gt.First().DateAdded.HasValue ? gt.First().DateAdded.Value : SqlServerMinDate,
         LastPlayed = gt.Max(t => t.PlayDate) != null ? gt.Max(t => t.PlayDate) : SqlServerMinDate,
         PlayCount = CalculateAlbumPlayCount(gt)
       };
@@ -55,10 +55,6 @@ namespace iTunesExport {
       compilationTracks.ForEach(ct => ct.Artist = "Various Artists");
       var groupedTracks = compilationTracks.GroupBy(ct => ct.Album);
       return groupedTracks.Select(AlbumGenerator());
-    }
-
-    public static string RemoveDiscNumbers(string album) {
-      return Regex.Replace(album, @"\s*(\(|\[)\s*Disc\s*\d\s*(\)|\])\s*", string.Empty);
     }
   }
 }

@@ -62,5 +62,42 @@ namespace iTunesExportTests {
       }
       Assert.AreEqual(lastFmLibraryAlbums.First().ArtworkLocation, albums.First().ArtworkLocation);
     }
+
+    [Test]
+    public void UpdateAlbums_Doesnt_Copy_Album_Art_If_It_Already_Exists() {
+      var lastFmClient = MockRepository.GenerateMock<ILastfmService>();
+      var config = MockRepository.GenerateMock<IConfig>();
+      var user = "george";
+      var existingUri = "http://existingUri.com";
+      var lastFmLibraryAlbums = new List<LastfmLibraryAlbum> { new LastfmLibraryAlbum { Artist = "John Coltrane", Name = "Giant Steps", ArtworkLocation = @"http://uri.here.com/asdf" } };
+      var albums = new List<Album> { new Album { Artist = "John Coltrane", Name = "Giant Steps", PlayCount = 12, ArtworkLocation = existingUri } };
+      var lastFmAlbumInfo = new LastFmAlbumInfo(lastFmClient);
+      config.Expect(c => c.LastFmUser).Return(user);
+      lastFmClient.Expect(l => l.FindAllAlbums(user)).Return(lastFmLibraryAlbums);
+
+      using (new ConfigScope(config)) {
+        lastFmAlbumInfo.UpdateAlbums(albums);
+      }
+      Assert.AreNotEqual(lastFmLibraryAlbums.First().ArtworkLocation, albums.First().ArtworkLocation);
+      Assert.AreEqual(existingUri, albums.First().ArtworkLocation);
+    }
+
+    [Test]
+    public void UpdateAlbums_Copies_Album_Art_If_Uri_Contains_noimage_Text() {
+      var lastFmClient = MockRepository.GenerateMock<ILastfmService>();
+      var config = MockRepository.GenerateMock<IConfig>();
+      var user = "george";
+      var existingUri = "http://noimage.com";
+      var lastFmLibraryAlbums = new List<LastfmLibraryAlbum> { new LastfmLibraryAlbum { Artist = "John Coltrane", Name = "Giant Steps", ArtworkLocation = @"http://uri.here.com/asdf" } };
+      var albums = new List<Album> { new Album { Artist = "John Coltrane", Name = "Giant Steps", PlayCount = 12, ArtworkLocation = existingUri } };
+      var lastFmAlbumInfo = new LastFmAlbumInfo(lastFmClient);
+      config.Expect(c => c.LastFmUser).Return(user);
+      lastFmClient.Expect(l => l.FindAllAlbums(user)).Return(lastFmLibraryAlbums);
+
+      using (new ConfigScope(config)) {
+        lastFmAlbumInfo.UpdateAlbums(albums);
+      }
+      Assert.AreEqual(lastFmLibraryAlbums.First().ArtworkLocation, albums.First().ArtworkLocation);
+    }
   }
 }

@@ -25,7 +25,9 @@ namespace iTunesExport {
       foreach (var album in albums) {
         var lastFmAlbum = lastFmAlbums.FirstOrDefault(MatchingAlbum(album));
         if (lastFmAlbum != null) {
-          album.ArtworkLocation = lastFmAlbum.ArtworkLocation;
+          if (string.IsNullOrEmpty(album.ArtworkLocation) || album.ArtworkLocation.Contains("noimage")) {
+            album.ArtworkLocation = lastFmAlbum.ArtworkLocation;
+          }
           if (lastFmAlbum.PlayCount > album.PlayCount) {
             album.PlayCount = lastFmAlbum.PlayCount;
           }
