@@ -30,7 +30,7 @@ namespace iTunesExport {
       Console.WriteLine("Calling Last FM Service to Get Album Info...");
       albumInfo.UpdateAlbums(albums);
  
-      var updatedCount = db.UpdateExistingWithIDs(albums);
+      var updatedCount = db.UpdateExisting(albums);
       var albumsToInsert = AlbumsToInsert(albums);
       var insertedCount = albumsToInsert.Count();
       foreach (var album in albumsToInsert) {

@@ -22,7 +22,7 @@ namespace iTunesExportTests {
       var fileLocation = "loc";
       var albums = new List<Album> { album };
 
-      db.Expect(d => d.UpdateExistingWithIDs(albums)).Return(0);
+      db.Expect(d => d.UpdateExisting(albums)).Return(0);
       db.Stub(d => d.Albums).Return(dbSetAlbums);
       config.Stub(c => c.ITunesFileLocation).Return(fileLocation);
       library.Stub(l => l.Parse(fileLocation)).Return(tracks);

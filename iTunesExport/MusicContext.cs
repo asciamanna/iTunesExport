@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -11,7 +12,7 @@ namespace iTunesExport {
     IDbSet<Album> Albums { get; set; }
     int SaveChanges();
     void ClearTables();
-    int UpdateExistingWithIDs(IEnumerable<Album> albumsToUpdate);
+    int UpdateExisting(IEnumerable<Album> albumsToUpdate);
   }
   public class MusicContext : DbContext, IMusicContext, IDisposable {
     public IDbSet<Album> Albums { get; set; }
@@ -30,12 +31,13 @@ namespace iTunesExport {
       modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
     }
 
-    public int UpdateExistingWithIDs(IEnumerable<Album> albumsToUpdate) {
+    public int UpdateExisting(IEnumerable<Album> albumsToUpdate) {
       //EF doesn't support bulk updates
       var recordsUpdated = 0;
       foreach (var album in albumsToUpdate) {
         var matchingRecord = this.Albums.FirstOrDefault(a => a.Artist == album.Artist && a.Name == album.Name);
         if (matchingRecord != null) {
+          matchingRecord.Update(album);
           album.AlbumID = matchingRecord.AlbumID;
           recordsUpdated++;
         }

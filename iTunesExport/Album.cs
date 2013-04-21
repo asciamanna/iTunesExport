@@ -43,6 +43,16 @@ namespace iTunesExport {
         return result;
       }
     }
+
+    public void Update(Album album) {
+      this.AlbumArtist = album.AlbumArtist;
+      this.DateAdded = album.DateAdded;
+      this.Year = album.Year;
+      this.PlayCount = album.PlayCount;
+      this.LastPlayed = album.LastPlayed;
+      this.ArtworkLocation = album.ArtworkLocation;
+      this.Genre = album.Genre;
+    }
   }
 
 
