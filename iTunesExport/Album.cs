@@ -50,7 +50,7 @@ namespace iTunesExport {
       this.Year = album.Year;
       this.PlayCount = album.PlayCount;
       this.LastPlayed = album.LastPlayed;
-      this.ArtworkLocation = album.ArtworkLocation;
+      this.ArtworkLocation = !string.IsNullOrEmpty(this.ArtworkLocation) ? this.ArtworkLocation : album.ArtworkLocation;
       this.Genre = album.Genre;
     }
   }

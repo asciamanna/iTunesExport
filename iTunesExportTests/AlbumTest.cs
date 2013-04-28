@@ -28,7 +28,7 @@ namespace iTunesExportTests {
         AlbumID = 77,
         Artist = "John Coltrane & McCoy Tyner",
         Name = "Ballads Remaster",
-        ArtworkLocation = "Some New rl",
+        ArtworkLocation = "new URL",
         AlbumArtist = "John Coltrane Quartet",
         DateAdded = DateTime.Now.AddDays(-3),
         LastPlayed = DateTime.Now.AddDays(-1),
@@ -38,7 +38,7 @@ namespace iTunesExportTests {
       };
 
       album.Update(updatedAlbum);
-      Assert.AreEqual(updatedAlbum.ArtworkLocation, album.ArtworkLocation);
+      Assert.AreEqual(album.ArtworkLocation, album.ArtworkLocation, "does not update artwork location if original album already had artwork");
       Assert.AreEqual(updatedAlbum.AlbumArtist, album.AlbumArtist);
       Assert.AreEqual(updatedAlbum.DateAdded, album.DateAdded);
       Assert.AreEqual(updatedAlbum.LastPlayed, album.LastPlayed);
@@ -49,6 +49,37 @@ namespace iTunesExportTests {
       Assert.AreNotEqual(updatedAlbum.AlbumID, album.AlbumID);
       Assert.AreNotEqual(updatedAlbum.Artist, album.Artist);
       Assert.AreNotEqual(updatedAlbum.Name, album.Name);
+    }
+
+    [Test]
+    public void Update_Does_Not_Overwrite_Album_Artwork_If_It_Already_Exists() {
+      var album = new Album {
+        AlbumID = 1,
+        Artist = "John Coltrane",
+        Name = "Ballads",
+        ArtworkLocation = "Some Url",
+        AlbumArtist = "John Coltrane",
+        DateAdded = DateTime.Now.AddDays(-4),
+        LastPlayed = DateTime.Now.AddDays(-2),
+        Genre = "Jazz",
+        PlayCount = 25,
+        Year = 1964
+      };
+
+      var updatedAlbum = new Album {
+        AlbumID = 1,
+        Artist = "John Coltrane",
+        Name = "Ballads",
+        ArtworkLocation = "new Url",
+        AlbumArtist = "John Coltrane",
+        DateAdded = DateTime.Now.AddDays(-4),
+        LastPlayed = DateTime.Now.AddDays(-2),
+        Genre = "Jazz",
+        PlayCount = 25,
+        Year = 1964
+      };
+      album.Update(updatedAlbum);
+      Assert.AreEqual(album.ArtworkLocation, "Some Url");
     }
   }
 }
