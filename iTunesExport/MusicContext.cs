@@ -10,12 +10,14 @@ using System.Linq;
 namespace iTunesExport {
   public interface IMusicContext : IDisposable {
     IDbSet<Album> Albums { get; set; }
+    IDbSet<AlbumTrack> AlbumTracks { get; set; }
     int SaveChanges();
     void ClearTables();
     int UpdateExisting(IEnumerable<Album> albumsToUpdate);
   }
   public class MusicContext : DbContext, IMusicContext, IDisposable {
     public IDbSet<Album> Albums { get; set; }
+    public IDbSet<AlbumTrack> AlbumTracks { get; set; }
 
     public void ClearTables() {
       var metadata = ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace;

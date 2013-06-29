@@ -38,8 +38,18 @@ namespace iTunesExport {
         Name = Trim(gt.First().Album),
         DateAdded = gt.First().DateAdded.HasValue ? gt.First().DateAdded.Value : SqlServerMinDate,
         LastPlayed = gt.Max(t => t.PlayDate) != null ? gt.Max(t => t.PlayDate) : SqlServerMinDate,
-        PlayCount = CalculateAlbumPlayCount(gt)
+        PlayCount = CalculateAlbumPlayCount(gt),
+        Tracks = BuildTracks(gt)
       };
+    }
+
+    static List<AlbumTrack> BuildTracks(IGrouping<string, Track> gt) {
+      var tracks = new List<AlbumTrack>();
+      gt.ToList().ForEach(t => {
+        var track = new AlbumTrack { Name = t.Name, PlayingTime = t.PlayingTime, TrackNumber = t.TrackNumber ?? 0, };
+        tracks.Add(track);
+      });
+      return tracks;
     }
 
     static int CalculateAlbumPlayCount(IGrouping<string, Track> gt) {

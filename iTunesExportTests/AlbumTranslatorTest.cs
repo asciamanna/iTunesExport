@@ -46,7 +46,7 @@ namespace iTunesImportTests {
       var track2 = track.Copy();
       track2.Name = "But Not For Me";
       track2.PlayDate = DateTime.Now.AddDays(-4);
-
+      
       var track3 = track.Copy();
       track3.Name = "My Favorite Things";
       track3.PlayDate = DateTime.Now.AddDays(-3);
@@ -62,6 +62,7 @@ namespace iTunesImportTests {
       Assert.AreEqual(track2.Album, album.Name);
       Assert.AreEqual(track2.DateAdded, album.DateAdded);
       Assert.AreEqual(track3.PlayDate, album.LastPlayed, "track with latest play date is used for album play date");
+      Assert.AreEqual(3, album.Tracks.Count());
     }
 
     [Test]

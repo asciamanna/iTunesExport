@@ -71,11 +71,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Album.cs" />
+    <Compile Include="AlbumTrack.cs" />
     <Compile Include="AlbumTranslator.cs" />
     <Compile Include="AlbumExport.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConfigScope.cs" />
     <Compile Include="LastFmAlbumInfo.cs" />
+    <Compile Include="Migrations\201304122126313_InitialCreate.cs" />
+    <Compile Include="Migrations\201304122126313_InitialCreate.Designer.cs">
+      <DependentUpon>201304122126313_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306222036020_AddAlbumTracks.cs" />
+    <Compile Include="Migrations\201306222036020_AddAlbumTracks.Designer.cs">
+      <DependentUpon>201306222036020_AddAlbumTracks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MusicContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -126,6 +136,14 @@
       <Project>{4da2791c-1bcb-48b8-a144-68346de0aea1}</Project>
       <Name>LastfmClient</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201304122126313_InitialCreate.resx">
+      <DependentUpon>201304122126313_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306222036020_AddAlbumTracks.resx">
+      <DependentUpon>201306222036020_AddAlbumTracks.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

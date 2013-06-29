@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ITunesLibraryParser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace iTunesExport {
     public DateTime DateAdded { get; set; }
     public DateTime? LastPlayed { get; set; }
     public string ArtworkLocation { get; set; }
+    public List<AlbumTrack> Tracks { get; set; }
 
     public override bool Equals(object obj) {
       var that = obj as Album;
@@ -25,7 +27,8 @@ namespace iTunesExport {
         this.Genre == that.Genre && this.Year == that.Year &&
         this.PlayCount == that.PlayCount &&
         this.DateAdded == that.DateAdded &&
-        this.ArtworkLocation == that.ArtworkLocation;
+        this.ArtworkLocation == that.ArtworkLocation &&
+        this.Tracks == that.Tracks;
     }
 
     public override int GetHashCode() {
@@ -40,6 +43,7 @@ namespace iTunesExport {
         result = (result * 397) ^ (PlayCount.GetHashCode());
         result = (result * 397) ^ (DateAdded.GetHashCode());
         result = (result * 397) ^ (ArtworkLocation.GetHashCode());
+        result = (result * 397) ^ (Tracks.GetHashCode());
         return result;
       }
     }
@@ -52,6 +56,7 @@ namespace iTunesExport {
       this.LastPlayed = album.LastPlayed;
       this.ArtworkLocation = !string.IsNullOrEmpty(this.ArtworkLocation) ? this.ArtworkLocation : album.ArtworkLocation;
       this.Genre = album.Genre;
+      //Assuming tracks will not change and will only be added on insert not update. So they aren't included here.
     }
   }
 
