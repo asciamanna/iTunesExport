@@ -31,3 +31,4 @@ update Album set ArtworkLocation = 'http://userserve-ak.last.fm/serve/_/22962007
 update Album set ArtworkLocation = 'http://userserve-ak.last.fm/serve/_/91671245/My+Favorite+Things.jpg' where Name like 'My Favorite Things (Remaster 2011)'
 update Album set ArtworkLocation = 'http://userserve-ak.last.fm/serve/500/97796041/Angel+Eyes.jpg' where Name like 'Angel Eyes (Remaster 2011)'
 update Album set ArtworkLocation = 'http://userserve-ak.last.fm/serve/_/88868013/Jazz+Impressions+Of+Japan.png' where Name like 'Jazz Impressions of Japan%'
+update Album set ArtworkLocation = 'http://userserve-ak.last.fm/serve/_/88867963/Time+Changes.png' where Name like 'Time Changes%'
